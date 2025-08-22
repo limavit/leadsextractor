@@ -1,12 +1,10 @@
 package br.com.ephesos.scraperleads.controller;
 
-import org.apache.poi.ss.extractor.ExcelExtractor;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 public class SerialHDController {
-    public String consultaSerialHD(){
+    public String consultaSerialHDWindows(){
         String serialHd = "";
 
         try {
@@ -24,4 +22,25 @@ public class SerialHDController {
 
         return serialHd;
     }
+    public String consultaSerialHDLinux() {
+        try {
+            // Método mais confiável para a maioria das distribuições
+            Process process = Runtime.getRuntime().exec(new String[]{
+                    "sh", "-c", "for disk in /dev/sd? /dev/nvme?; do [ -b \"$disk\" ] && echo \"$disk: $(udevadm info --query=property --name=$disk | grep ID_SERIAL= | cut -d'=' -f2)\"; done | head -n1 | awk '{print $2}'"
+            });
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            String serial = reader.readLine();
+
+            if (serial != null && !serial.trim().isEmpty()) {
+                return serial.trim();
+            }
+
+        } catch (Exception e) {
+            System.out.println("Erro com udevadm: " + e.getMessage());
+        }
+
+        return "Serial-Não-Encontrado";
+    }
+
 }

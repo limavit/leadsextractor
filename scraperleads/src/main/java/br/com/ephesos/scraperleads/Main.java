@@ -14,7 +14,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import javax.sql.rowset.serial.SerialStruct;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -32,16 +31,39 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-        // Verificação da licença
-
+        //Verificacao do sistema
+        System.out.println("Selecione sistema Operacional");
+        String so = new Scanner(System.in).nextLine();
         System.out.println("Cadastrando dados unicos do computador... ");
         SerialHD serialHD = new SerialHD();
-        SerialHDController serialHDController = new SerialHDController();
-        serialHD.setDocumento("12345789");
-        serialHD.setSerialHD(serialHDController.consultaSerialHD());
-        // inserindo no banco
-        SerialHDDAO serialHDDAO = DAOFactory.createSerialHDDAO();
-        serialHDDAO.insert(serialHD);
+        if (so.equalsIgnoreCase("WINDOWS")){
+            //Inserindo dados do HD
+            SerialHDController serialHDController = new SerialHDController();
+            serialHD.setDocumento("12345789");
+            serialHD.setSerialHD(serialHDController.consultaSerialHDWindows());
+            // inserindo no banco
+            SerialHDDAO serialHDDAO = DAOFactory.createSerialHDDAO();
+            serialHDDAO.insert(serialHD);
+
+        } else if (so.equalsIgnoreCase("LINUX")) {
+            //Inserindo dados do HD
+            SerialHDController serialHDControllerLinux = new SerialHDController();
+            serialHD.setDocumento("12345789");
+            serialHD.setSerialHD(serialHDControllerLinux.consultaSerialHDLinux());
+            // inserindo no banco
+            SerialHDDAO serialHDDAO = DAOFactory.createSerialHDDAO();
+            serialHDDAO.insert(serialHD);
+
+        }
+        {
+
+        }
+
+        // Verificação da licença
+        /*
+
+
+        */
         //Verificando licença
         System.out.println("Verificando licença: ");
         System.out.println("Insira a chave do produto: ");
