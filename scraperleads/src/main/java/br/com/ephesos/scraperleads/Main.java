@@ -55,15 +55,7 @@ public class Main extends Application {
             serialHDDAO.insert(serialHD);
 
         }
-        {
 
-        }
-
-        // Verificação da licença
-        /*
-
-
-        */
         //Verificando licença
         System.out.println("Verificando licença: ");
         System.out.println("Insira a chave do produto: ");
